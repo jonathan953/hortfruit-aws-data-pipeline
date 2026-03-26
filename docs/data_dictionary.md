@@ -1,7 +1,12 @@
-
-## 📊 Dataset - Camada RAW
+## 📊 Dataset & Data Dictionary (RAW Layer)
 
 Este projeto utiliza um dataset simulado de vendas de hortifruti, contendo aproximadamente **5.000 registros** e **22 colunas**, representando transações com inconsistências típicas de dados reais.
+
+---
+
+## 📥 Fonte dos Dados
+
+Dataset gerado de forma simulada, representando um sistema ERP de vendas de hortifruti, com inserção intencional de inconsistências para simular cenários reais de baixa qualidade de dados.
 
 ---
 
@@ -20,7 +25,15 @@ O principal objetivo é garantir **rastreabilidade, auditoria e reprocessamento*
 
 ---
 
-## 📚 Dicionário de Dados (Data Catalog)
+## 📏 Granularidade dos Dados
+
+- Nível: transação de venda (linha por venda)
+- Volume: ~5.000 registros
+- Frequência simulada: diária
+
+---
+
+## 📚 Dicionário de Dados
 
 | #  | Coluna               | Tipo (RAW)       | Tipo (CURATED) | Descrição (resumida)          | Problemas comuns no RAW          | Exemplo                |
 | -- | -------------------- | ---------------- | -------------- | ----------------------------- | -------------------------------- | ---------------------- |
@@ -49,7 +62,37 @@ O principal objetivo é garantir **rastreabilidade, auditoria e reprocessamento*
 
 ---
 
-💡 **Nota:**
+💡 **Observação:**
 A camada RAW contém dados não tratados. Todas as validações, padronizações e cálculos são aplicados na camada Curated via AWS Glue.
+
+---
+
+## 🏷️ Classificação dos Dados
+
+Durante o processamento (Glue ETL), os registros são classificados em:
+
+- **clean** → dados válidos e prontos para uso  
+- **flagged** → dados com inconsistências leves  
+- **rejected** → dados inválidos que não atendem regras de qualidade  
+
+---
+
+## ⚠️ Regras de Data Quality (DQ) Aplicadas
+
+As seguintes validações são aplicadas durante o processamento na camada Curated:
+
+- sale_id não pode ser nulo ou duplicado  
+- quantidade deve ser maior que zero  
+- preco_venda_unitario ≥ custo_unitario  
+- datas devem estar em formato válido  
+- margem_lucro deve estar dentro de faixa aceitável  
+
+---
+
+## 🔗 Relação com o Pipeline
+
+- RAW → ingestão de dados sem tratamento  
+- CURATED → aplicação de Data Quality e regras de negócio  
+- GOLD → consumo analítico e dashboards  
 
 ---
